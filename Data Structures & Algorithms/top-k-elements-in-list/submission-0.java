@@ -1,0 +1,35 @@
+class Solution {
+    public int[] topKFrequent(int[] nums, int k) {
+       Map<Integer, Integer> freq = new HashMap<>();
+        
+        // Step 1: frequency map
+        for (int num : nums) {
+            freq.put(num, freq.getOrDefault(num, 0) + 1);
+        }
+        
+        // Step 2: bucket array
+        List<Integer>[] buckets = new List[nums.length + 1];
+        
+        for (int key : freq.keySet()) {
+            int f = freq.get(key);
+            if (buckets[f] == null) {
+                buckets[f] = new ArrayList<>();
+            }
+            buckets[f].add(key);
+        }
+        
+        // Step 3: collect top k
+        int[] result = new int[k];
+        int index = 0;
+        
+        for (int i = buckets.length - 1; i >= 0 && index < k; i--) {
+            if (buckets[i] != null) {
+                for (int num : buckets[i]) {
+                    result[index++] = num;
+                    if (index == k) break;
+                }
+            }
+        }
+        return result; 
+    }
+}
